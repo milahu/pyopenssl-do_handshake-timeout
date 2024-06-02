@@ -187,11 +187,17 @@ class TestFunctions:
                         conn.setblocking(1)
                         raise TimeoutError
                     # TODO? handle timeout from select
-                    readable, writable, errored = select.select([sock], [sock], [], remain)
+                    readable, writable, errored = select.select(
+                        # no. dont select writable sock
+                        #[sock], [sock], [], remain
+                        [sock], [], [], remain
+                    )
                     print("select", (readable, writable, errored))
                     #if <select timed out>:
                     #    raise <something - the original exception?  a specific timeout exception?>
-                    time.sleep(0.5) # reduce cpu load
+                    # no. this was only needed with select writable sock
+                    # because the sock is always writable
+                    #time.sleep(0.5) # reduce cpu load
 
         do_handshake()
 
